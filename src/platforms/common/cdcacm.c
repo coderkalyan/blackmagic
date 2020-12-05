@@ -40,6 +40,7 @@
 #include <libopencm3/usb/cdc.h>
 #include <libopencm3/cm3/scb.h>
 #include <libopencm3/usb/dfu.h>
+#include <libopencm3/usb/dwc/otg_fs.h>
 #include <stdlib.h>
 
 #define DFU_IF_NO 4
@@ -556,6 +557,13 @@ void cdcacm_init(void)
 	usbdev = usbd_init(&USB_DRIVER, &dev, &config, usb_strings,
 			    sizeof(usb_strings)/sizeof(char *),
 			    usbd_control_buffer, sizeof(usbd_control_buffer));
+
+#if defined(STM32F401) || defined(STM32F411)
+    // https://github.com/libopencm3/libopencm3/issues/1119#issuecomment-549071405
+    // Fix for otgfs_usb_driver setting VBUSSEN regardless of what board it is
+    OTG_FS_GCCFG |= OTG_GCCFG_NOVBUSSENS;
+    OTG_FS_GCCFG &= ~OTG_GCCFG_VBUSBSEN;
+#endif
 
 	usbd_register_set_config_callback(usbdev, cdcacm_set_config);
 
