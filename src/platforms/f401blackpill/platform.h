@@ -70,9 +70,9 @@
 #define SWDIO_PIN	TMS_PIN
 #define SWCLK_PIN	TCK_PIN
 
-#define TRST_PORT	GPIOC
+#define TRST_PORT	GPIOA
 #define TRST_PIN	GPIO1
-#define SRST_PORT	GPIOC
+#define SRST_PORT	GPIOA
 #define SRST_PIN	GPIO8
 
 #define LED_PORT	GPIOB
@@ -83,6 +83,9 @@
 #define LED_BOOTLOADER	GPIO15
 #define BOOTMAGIC0 0xb007da7a
 #define BOOTMAGIC1 0xbaadfeed
+
+//#define NUM_TRACE_PACKETS (128)
+//#define TRACESWO_PROTOCOL 2
 
 #define TMS_SET_MODE() \
 	gpio_mode_setup(TMS_PORT, GPIO_MODE_OUTPUT, \
@@ -108,15 +111,29 @@
 #define IRQ_PRI_USBUSART_TIM	(3 << 4)
 #define IRQ_PRI_TRACE		(0 << 4)
 
-#define USBUSART USART3
-#define USBUSART_CR1 USART3_CR1
-#define USBUSART_IRQ NVIC_USART3_IRQ
-#define USBUSART_CLK RCC_USART3
-#define USBUSART_TX_PORT GPIOD
-#define USBUSART_TX_PIN  GPIO8
-#define USBUSART_RX_PORT GPIOD
-#define USBUSART_RX_PIN  GPIO9
-#define USBUSART_ISR usart3_isr
+//#define USBUSART USART3
+//#define USBUSART_CR1 USART3_CR1
+//#define USBUSART_IRQ NVIC_USART3_IRQ
+//#define USBUSART_CLK RCC_USART3
+//#define USBUSART_TX_PORT GPIOD
+//#define USBUSART_TX_PIN  GPIO8
+//#define USBUSART_RX_PORT GPIOD
+//#define USBUSART_RX_PIN  GPIO9
+//#define USBUSART_ISR usart3_isr
+//#define USBUSART_TIM TIM4
+//#define USBUSART_TIM_CLK_EN() rcc_periph_clock_enable(RCC_TIM4)
+//#define USBUSART_TIM_IRQ NVIC_TIM4_IRQ
+//#define USBUSART_TIM_ISR tim4_isr
+
+#define USBUSART USART2
+#define USBUSART_CR1 USART2_CR1
+#define USBUSART_IRQ NVIC_USART2_IRQ
+#define USBUSART_CLK RCC_USART2
+#define USBUSART_TX_PORT GPIOA
+#define USBUSART_TX_PIN  GPIO2
+#define USBUSART_RX_PORT GPIOA
+#define USBUSART_RX_PIN  GPIO3
+#define USBUSART_ISR usart12isr
 #define USBUSART_TIM TIM4
 #define USBUSART_TIM_CLK_EN() rcc_periph_clock_enable(RCC_TIM4)
 #define USBUSART_TIM_IRQ NVIC_TIM4_IRQ
@@ -131,10 +148,24 @@
 	gpio_set_af(USBUSART_RX_PORT, GPIO_AF7, USBUSART_RX_PIN); \
     } while(0)
 
+#define SWO_UART USART1
+#define SWO_UART_DR USART1_DR
+#define SWO_UART_CLK RCC_USART1
+#define SWO_UART_PORT GPIOA
+#define SWO_UART_RX_PIN GPIO10
+
 #define TRACE_TIM TIM3
 #define TRACE_TIM_CLK_EN() rcc_periph_clock_enable(RCC_TIM3)
 #define TRACE_IRQ   NVIC_TIM3_IRQ
 #define TRACE_ISR   tim3_isr
+
+//#define SWO_DMA_BUS DMA1
+//#define SWO_DMA_CLK RCC_DMA1
+//#define SWO_DMA_CHAN DMA_CHANNEL4
+//#define SWO_DMA_CHAN DMA_STREAM4
+//#define SWO_DMA_IRQ NVIC_DMA1_CHANNEL4_IRQ
+//#define SWO_DMA_IRQ NVIC_DMA1_STREAM4_IRQ
+//#define SWO_DMA_ISR(x) dma1_channel4_isr(x)
 
 #define gpio_set_val(port, pin, val) do {	\
 	if(val)					\

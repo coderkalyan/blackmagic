@@ -51,7 +51,7 @@ void usbuart_init(void)
 	UART_PIN_SETUP();
 
 	/* Setup UART parameters. */
-	usart_set_baudrate(USBUSART, 38400);
+    usart_set_baudrate(USBUSART, 38400);
 	usart_set_databits(USBUSART, 8);
 	usart_set_stopbits(USBUSART, USART_STOPBITS_1);
 	usart_set_mode(USBUSART, USART_MODE_TX_RX);
@@ -90,6 +90,7 @@ void usbuart_init(void)
  */
 static void usbuart_run(void)
 {
+    gpio_set(LED_PORT_UART, LED_UART);
 	/* forcibly empty fifo if no USB endpoint */
 	if (cdcacm_get_config() != 1)
 	{
@@ -100,7 +101,7 @@ static void usbuart_run(void)
 	if (buf_rx_in == buf_rx_out) {
 		/* turn off LED, disable IRQ */
 		timer_disable_irq(USBUSART_TIM, TIM_DIER_UIE);
-		gpio_clear(LED_PORT_UART, LED_UART);
+        gpio_clear(LED_PORT_UART, LED_UART);
 	}
 	else
 	{
@@ -181,7 +182,7 @@ void usbuart_usb_out_cb(usbd_device *dev, uint8_t ep)
 	gpio_set(LED_PORT_UART, LED_UART);
 	for(int i = 0; i < len; i++)
 		usart_send_blocking(USBUSART, buf[i]);
-	gpio_clear(LED_PORT_UART, LED_UART);
+    gpio_clear(LED_PORT_UART, LED_UART);
 }
 
 #ifdef USBUART_DEBUG
@@ -214,13 +215,13 @@ void usbuart_usb_in_cb(usbd_device *dev, uint8_t ep)
  */
 void USBUSART_ISR(void)
 {
-	uint32_t err = USART_SR(USBUSART);
+	/*uint32_t err = USART_SR(USBUSART);*/
 	char c = usart_recv(USBUSART);
 #if !defined(USART_SR_NE) && defined(USART_ISR_NF)
 # define USART_SR_NE USART_ISR_NF
 #endif
-	if (err & (USART_FLAG_ORE | USART_FLAG_FE | USART_SR_NE))
-		return;
+	/*if (err & (USART_FLAG_ORE | USART_FLAG_FE | USART_SR_NE))*/
+		/*return;*/
 
 	/* Turn on LED */
 	gpio_set(LED_PORT_UART, LED_UART);
